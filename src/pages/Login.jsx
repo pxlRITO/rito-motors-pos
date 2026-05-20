@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Mail, Lock, Loader2, AlertCircle, Car } from 'lucide-react';
-import Input from '../components/Input';
+import { Mail, Lock, Loader2, AlertCircle, Car, ArrowRight } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -24,7 +23,6 @@ const Login = () => {
 
       if (error) throw error;
       
-      // Fetch profile to determine role and redirect
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
@@ -44,37 +42,40 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-toyota-gray p-4 font-sans">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 shadow-lg shadow-blue-600/20">
-            <span className="text-3xl font-bold text-white">R</span>
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-toyota-red rounded-sm mb-4 shadow-xl shadow-toyota-red/20 rotate-3">
+            <span className="text-4xl font-black text-white italic tracking-tighter">R</span>
           </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight italic">RitoMotors</h1>
-          <p className="text-slate-400 mt-2 font-medium">Point of Sale & Showroom</p>
+          <h1 className="text-4xl font-black text-toyota-black tracking-tighter uppercase italic">RitoMotors</h1>
+          <p className="text-toyota-charcoal/60 mt-2 font-bold uppercase tracking-[0.2em] text-[10px]">Premium Automotive POS & Showroom</p>
         </div>
 
-        <div className="card p-8 bg-slate-900/50 backdrop-blur-sm">
-          <h2 className="text-xl font-bold mb-6 text-center uppercase tracking-widest">Sign In</h2>
+        <div className="bg-white border-t-4 border-toyota-red p-8 md:p-10 shadow-2xl rounded-sm">
+          <div className="mb-8">
+            <h2 className="text-2xl font-black text-toyota-black uppercase tracking-tight">Welcome Back</h2>
+            <p className="text-toyota-charcoal/50 text-xs font-bold uppercase tracking-widest mt-1">Sign in to your account</p>
+          </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3 text-red-500 text-sm">
+            <div className="mb-6 p-4 bg-red-50 border-l-4 border-toyota-red flex items-center gap-3 text-toyota-red text-xs font-bold uppercase tracking-wider">
               <AlertCircle size={18} />
               <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
               <label className="label">Email Address</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-toyota-charcoal/30">
                   <Mail size={18} />
                 </div>
                 <input
                   type="email"
                   required
-                  className="input pl-10"
+                  className="input pl-12"
                   placeholder="your@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -82,16 +83,16 @@ const Login = () => {
               </div>
             </div>
 
-            <div>
+            <div className="space-y-2">
               <label className="label">Password</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-toyota-charcoal/30">
                   <Lock size={18} />
                 </div>
                 <input
                   type="password"
                   required
-                  className="input pl-10"
+                  className="input pl-12"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -102,40 +103,44 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full flex items-center justify-center gap-2 mt-6 py-3 shadow-xl shadow-blue-600/20"
+              className="btn-primary w-full flex items-center justify-center gap-3 py-4 text-sm"
             >
               {loading ? (
                 <>
                   <Loader2 size={20} className="animate-spin" />
-                  <span>Signing in...</span>
+                  <span>Processing...</span>
                 </>
               ) : (
-                'Sign In'
+                <>
+                  <span>Sign In</span>
+                  <ArrowRight size={18} />
+                </>
               )}
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-slate-800 text-center space-y-4">
-            <div className="flex flex-col gap-3">
+          <div className="mt-10 pt-8 border-t border-gray-100 text-center space-y-6">
+            <div className="grid grid-cols-1 gap-3">
               <button
                 onClick={() => navigate('/showroom')}
-                className="btn-secondary w-full py-3 flex items-center justify-center gap-2 group border-slate-800 hover:border-blue-500/50"
+                className="btn-secondary w-full py-4 flex items-center justify-center gap-3 group"
               >
-                <Car size={18} className="group-hover:text-blue-500 transition-colors" />
-                <span className="font-bold uppercase tracking-widest text-xs">Browse Showroom</span>
+                <Car size={20} className="group-hover:text-toyota-red transition-colors" />
+                <span className="text-xs font-black uppercase tracking-[0.2em]">Explore Showroom</span>
               </button>
               
-              <button
-                onClick={() => navigate('/signup')}
-                className="text-sm text-slate-400 hover:text-white transition-colors"
-              >
-                Don't have an account? <span className="text-blue-500 font-bold">Sign Up</span>
-              </button>
+              <p className="text-xs font-bold text-toyota-charcoal/50 uppercase tracking-widest">
+                Don't have an account?{' '}
+                <Link to="/signup" className="text-toyota-red font-black hover:underline ml-1">
+                  Create One
+                </Link>
+              </p>
             </div>
 
-            <div className="pt-4">
-              <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">RitoMotors Dealership</p>
-              <p className="text-[10px] text-slate-600 mt-1 uppercase">Tagbilaran City, Bohol</p>
+            <div className="pt-4 flex flex-col items-center gap-1 opacity-40">
+              <p className="text-[10px] text-toyota-black font-black uppercase tracking-[0.3em]">RitoMotors Dealership</p>
+              <div className="w-8 h-0.5 bg-toyota-red"></div>
+              <p className="text-[8px] text-toyota-charcoal font-bold uppercase tracking-widest mt-1">Tagbilaran City, Bohol</p>
             </div>
           </div>
         </div>

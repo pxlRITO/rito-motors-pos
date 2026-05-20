@@ -123,18 +123,18 @@ const POS = ({ user, profile }) => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500 font-sans">
       <div>
-        <h1 className="text-2xl font-bold">POS Checkout</h1>
-        <p className="text-slate-400">Complete a vehicle sale and generate an invoice.</p>
+        <h1 className="section-title">POS Checkout</h1>
+        <p className="text-[10px] font-black text-toyota-charcoal uppercase tracking-[0.2em] mt-2">Complete a vehicle sale and generate an invoice.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Form */}
         <div className="lg:col-span-2 space-y-6">
           <section className="card p-6 space-y-4">
-            <h2 className="text-lg font-bold flex items-center gap-2">
-              <ShoppingCart size={20} className="text-blue-500" />
+            <h2 className="text-lg font-black uppercase tracking-tight flex items-center gap-2 text-toyota-black">
+              <ShoppingCart size={20} className="text-toyota-red" />
               Vehicle Selection
             </h2>
             <Select 
@@ -150,9 +150,9 @@ const POS = ({ user, profile }) => {
               ]}
             />
             {selectedCar && (
-              <div className="p-4 bg-slate-800/50 rounded-lg border border-slate-700 flex flex-col md:flex-row justify-between gap-4">
+              <div className="p-4 bg-toyota-gray rounded-sm border border-gray-100 flex flex-col md:flex-row justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-16 rounded-lg bg-slate-900 overflow-hidden border border-slate-700 flex-shrink-0">
+                  <div className="w-20 h-16 rounded-sm bg-white overflow-hidden border border-gray-200 flex-shrink-0">
                     {selectedCar.image_url ? (
                       <img 
                         src={selectedCar.image_url} 
@@ -164,27 +164,27 @@ const POS = ({ user, profile }) => {
                         }}
                       />
                     ) : null}
-                    <div className={`w-full h-full flex items-center justify-center text-slate-700 ${selectedCar.image_url ? 'hidden' : 'flex'}`}>
+                    <div className={`w-full h-full flex items-center justify-center text-gray-300 ${selectedCar.image_url ? 'hidden' : 'flex'}`}>
                       <Car size={24} />
                     </div>
                   </div>
                   <div>
-                    <p className="text-sm text-slate-400 uppercase font-bold tracking-wider">Selected Vehicle</p>
-                    <h3 className="text-xl font-bold">{selectedCar.make} {selectedCar.model}</h3>
-                    <p className="text-slate-300 text-xs">VIN: {selectedCar.vin}</p>
+                    <p className="text-[9px] text-gray-500 uppercase font-black tracking-[0.2em]">Selected Vehicle</p>
+                    <h3 className="text-lg font-black uppercase tracking-tight text-toyota-black">{selectedCar.make} {selectedCar.model}</h3>
+                    <p className="text-toyota-charcoal text-[10px] font-mono tracking-widest uppercase">VIN: {selectedCar.vin}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-slate-400">Base Price</p>
-                  <p className="text-2xl font-bold text-blue-500">${Number(selectedCar.price).toLocaleString()}</p>
+                  <p className="text-[9px] text-gray-500 uppercase font-black tracking-[0.2em]">Base Price</p>
+                  <p className="text-2xl font-black text-toyota-red tracking-tighter">${Number(selectedCar.price).toLocaleString()}</p>
                 </div>
               </div>
             )}
           </section>
 
           <section className="card p-6 space-y-4">
-            <h2 className="text-lg font-bold flex items-center gap-2">
-              <User size={20} className="text-blue-500" />
+            <h2 className="text-lg font-black uppercase tracking-tight flex items-center gap-2 text-toyota-black">
+              <User size={20} className="text-toyota-red" />
               Customer Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -216,8 +216,8 @@ const POS = ({ user, profile }) => {
           </section>
 
           <section className="card p-6 space-y-4">
-            <h2 className="text-lg font-bold flex items-center gap-2">
-              <CreditCard size={20} className="text-blue-500" />
+            <h2 className="text-lg font-black uppercase tracking-tight flex items-center gap-2 text-toyota-black">
+              <CreditCard size={20} className="text-toyota-red" />
               Payment & Fees
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -255,9 +255,9 @@ const POS = ({ user, profile }) => {
 
         {/* Right Column: Order Summary */}
         <div className="space-y-6">
-          <section className="card p-6 sticky top-6">
-            <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <Receipt size={24} className="text-blue-500" />
+          <section className="card p-6 sticky top-6 border-t-4 border-t-toyota-red">
+            <h2 className="text-xl font-black uppercase tracking-tight mb-6 flex items-center gap-2 text-toyota-black">
+              <Receipt size={24} className="text-toyota-red" />
               Sale Summary
             </h2>
             
@@ -270,7 +270,7 @@ const POS = ({ user, profile }) => {
             </div>
 
             {error && (
-              <div className="mt-6 p-3 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-2 text-red-500 text-xs">
+              <div className="mt-6 p-3 bg-red-50 border border-toyota-red/20 rounded-sm flex items-center gap-2 text-toyota-red text-[10px] font-bold uppercase tracking-wider">
                 <AlertCircle size={16} />
                 <span>{error}</span>
               </div>
@@ -279,7 +279,7 @@ const POS = ({ user, profile }) => {
             <button
               onClick={handleCheckout}
               disabled={loading || !selectedCar || !customer.name || !customer.email}
-              className="btn-primary w-full mt-8 py-4 text-lg flex items-center justify-center gap-2"
+              className="btn-primary w-full mt-8 py-4 text-sm flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -294,7 +294,7 @@ const POS = ({ user, profile }) => {
               )}
             </button>
             
-            <p className="text-[10px] text-slate-500 text-center mt-4 uppercase tracking-widest">
+            <p className="text-[9px] text-gray-400 text-center mt-4 uppercase font-black tracking-[0.2em]">
               By finalizing, the vehicle status will be updated to Sold
             </p>
           </section>

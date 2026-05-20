@@ -4,53 +4,65 @@
 
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100;
+    @apply bg-toyota-gray text-toyota-black;
   }
 }
 
 @layer components {
   .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply px-5 py-2.5 rounded-sm font-bold uppercase tracking-wider transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs;
   }
   
   .btn-primary {
-    @apply btn bg-blue-600 hover:bg-blue-700 text-white;
+    @apply btn bg-toyota-red hover:bg-red-700 text-white shadow-sm hover:shadow-md;
   }
   
   .btn-secondary {
-    @apply btn bg-slate-800 hover:bg-slate-700 text-slate-100;
+    @apply btn bg-toyota-black hover:bg-toyota-charcoal text-white;
   }
   
+  .btn-outline {
+    @apply btn bg-transparent border-2 border-toyota-black text-toyota-black hover:bg-toyota-black hover:text-white;
+  }
+
   .btn-danger {
     @apply btn bg-red-600 hover:bg-red-700 text-white;
   }
   
   .card {
-    @apply bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm;
+    @apply bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm hover:shadow-md transition-shadow;
   }
   
   .input {
-    @apply w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all;
+    @apply w-full bg-white border border-gray-300 rounded-sm px-4 py-3 text-toyota-black focus:outline-none focus:ring-2 focus:ring-toyota-red/20 focus:border-toyota-red transition-all;
   }
   
   .label {
-    @apply block text-sm font-medium text-slate-400 mb-1.5;
+    @apply block text-[10px] font-black text-toyota-charcoal uppercase tracking-widest mb-1.5;
   }
 
   .table-container {
-    @apply overflow-x-auto rounded-xl border border-slate-800 bg-slate-900;
+    @apply overflow-x-auto rounded-sm border border-gray-200 bg-white;
   }
 
   .table-header {
-    @apply bg-slate-800/50 text-slate-400 text-xs font-semibold uppercase tracking-wider;
+    @apply bg-toyota-black text-white text-[10px] font-black uppercase tracking-[0.2em];
   }
 
   .table-row {
-    @apply border-t border-slate-800 hover:bg-slate-800/30 transition-colors;
+    @apply border-t border-gray-100 hover:bg-toyota-gray transition-colors;
   }
 
   .table-cell {
-    @apply px-4 py-3 text-sm;
+    @apply px-6 py-4 text-sm font-medium;
+  }
+
+  .section-title {
+    @apply text-2xl font-black uppercase tracking-tight text-toyota-black relative pb-2;
+  }
+
+  .section-title::after {
+    @apply content-[''] absolute bottom-0 left-0 w-12 h-1 bg-toyota-red;
   }
 }
 

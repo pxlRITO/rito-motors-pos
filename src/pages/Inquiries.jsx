@@ -88,16 +88,16 @@ const Inquiries = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500 font-sans">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Customer Inquiries</h1>
-          <p className="text-slate-400">Manage showroom leads and customer inquiries.</p>
+          <h1 className="section-title">Customer Inquiries</h1>
+          <p className="text-[10px] font-black text-toyota-charcoal uppercase tracking-[0.2em] mt-2">Manage showroom leads and customer inquiries.</p>
         </div>
       </div>
 
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-toyota-charcoal" size={18} />
         <input
           type="text"
           placeholder="Search by customer, email, or vehicle..."
@@ -108,7 +108,7 @@ const Inquiries = () => {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3 text-red-500 text-sm">
+        <div className="p-4 bg-red-50 border border-toyota-red/20 rounded-sm flex items-center gap-3 text-toyota-red text-[10px] font-bold uppercase tracking-wider">
           <AlertCircle size={18} />
           <span>{error}</span>
         </div>
@@ -131,29 +131,29 @@ const Inquiries = () => {
                 {loading ? (
                   <tr>
                     <td colSpan="4" className="table-cell text-center py-12">
-                      <Loader2 className="animate-spin mx-auto text-blue-500" size={32} />
+                      <Loader2 className="animate-spin mx-auto text-toyota-red" size={32} />
                     </td>
                   </tr>
                 ) : filteredInquiries.length > 0 ? (
                   filteredInquiries.map((inq) => (
                     <tr 
                       key={inq.id} 
-                      className={`table-row cursor-pointer ${selectedInquiry?.id === inq.id ? 'bg-blue-600/10 border-l-2 border-l-blue-600' : ''}`}
+                      className={`table-row cursor-pointer ${selectedInquiry?.id === inq.id ? 'bg-toyota-red/5 border-l-2 border-l-toyota-red' : ''}`}
                       onClick={() => setSelectedInquiry(inq)}
                     >
                       <td className="table-cell">
-                        <div className="font-bold">{inq.customer_name}</div>
-                        <div className="text-[10px] text-slate-500 font-mono">{new Date(inq.created_at).toLocaleString()}</div>
+                        <div className="font-black text-toyota-black uppercase text-xs tracking-tight">{inq.customer_name}</div>
+                        <div className="text-[9px] text-gray-400 font-black uppercase tracking-widest">{new Date(inq.created_at).toLocaleString()}</div>
                       </td>
                       <td className="table-cell">
-                        <div className="text-sm font-semibold">{inq.cars?.year} {inq.cars?.make} {inq.cars?.model}</div>
-                        <div className="text-xs text-blue-500 font-bold">${Number(inq.cars?.price).toLocaleString()}</div>
+                        <div className="text-[10px] font-black text-toyota-charcoal uppercase tracking-widest">{inq.cars?.year} {inq.cars?.make} {inq.cars?.model}</div>
+                        <div className="text-[10px] text-toyota-red font-black tracking-widest">${Number(inq.cars?.price).toLocaleString()}</div>
                       </td>
                       <td className="table-cell">
                         {getStatusBadge(inq.status)}
                       </td>
                       <td className="table-cell text-right">
-                        <button className="p-2 text-slate-400 hover:text-white">
+                        <button className="p-2 text-gray-400 hover:text-toyota-red transition-colors">
                           <ChevronRight size={18} />
                         </button>
                       </td>
@@ -161,7 +161,7 @@ const Inquiries = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" className="table-cell text-center py-12 text-slate-500">
+                    <td colSpan="4" className="table-cell text-center py-12 text-gray-400 font-bold uppercase text-[10px] tracking-widest">
                       No inquiries found.
                     </td>
                   </tr>
@@ -174,27 +174,27 @@ const Inquiries = () => {
         {/* Inquiry Detail Sidebar */}
         <div className="space-y-6">
           {selectedInquiry ? (
-            <div className="card p-6 sticky top-6 space-y-8 animate-in slide-in-from-right-4 duration-300">
+            <div className="card p-6 sticky top-6 space-y-8 animate-in slide-in-from-right-4 duration-300 border-t-4 border-t-toyota-red">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold">Inquiry Details</h2>
+                <h2 className="text-xl font-black uppercase tracking-tight text-toyota-black">Inquiry Details</h2>
                 {getStatusBadge(selectedInquiry.status)}
               </div>
 
               <div className="space-y-4">
-                <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-3">
-                  <div className="flex items-center gap-3 text-slate-300">
-                    <Phone size={16} className="text-blue-500" />
-                    <span className="text-sm font-semibold">{selectedInquiry.customer_contact}</span>
+                <div className="p-4 bg-toyota-gray rounded-sm border border-gray-100 space-y-3">
+                  <div className="flex items-center gap-3 text-toyota-charcoal">
+                    <Phone size={16} className="text-toyota-red" />
+                    <span className="text-xs font-bold uppercase tracking-widest">{selectedInquiry.customer_contact}</span>
                   </div>
-                  <div className="flex items-center gap-3 text-slate-300">
-                    <Mail size={16} className="text-blue-500" />
-                    <span className="text-sm font-semibold">{selectedInquiry.customer_email}</span>
+                  <div className="flex items-center gap-3 text-toyota-charcoal">
+                    <Mail size={16} className="text-toyota-red" />
+                    <span className="text-xs font-bold lowercase tracking-wider">{selectedInquiry.customer_email}</span>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Message from Customer</p>
-                  <div className="p-4 bg-slate-800/30 rounded-xl border border-slate-800 text-sm text-slate-300 italic leading-relaxed">
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Message from Customer</p>
+                  <div className="p-4 bg-toyota-gray/50 rounded-sm border border-gray-100 text-xs text-toyota-charcoal italic leading-relaxed">
                     "{selectedInquiry.message || 'No additional notes provided.'}"
                   </div>
                 </div>

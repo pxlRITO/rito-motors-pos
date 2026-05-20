@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X, LogOut, LayoutDashboard, Car, ShoppingCart, Users, BarChart3, MessageSquare } from 'lucide-react';
 import { supabase } from '../lib/supabase';
@@ -29,15 +30,15 @@ const MobileTopbar = ({ user, profile }) => {
   });
 
   return (
-    <div className="md:hidden relative z-[100]">
-      <div className="bg-slate-900 border-b border-slate-800 p-4 flex items-center justify-between shadow-md">
+    <div className="md:hidden relative z-[100] font-sans">
+      <div className="bg-toyota-black text-white p-4 flex items-center justify-between shadow-md">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg text-white">R</div>
-          <span className="font-bold text-lg tracking-tight text-white">RitoMotors</span>
+          <div className="w-8 h-8 bg-toyota-red rounded-sm flex items-center justify-center font-black text-lg italic shadow-lg shadow-toyota-red/20">R</div>
+          <span className="font-black text-lg tracking-tighter uppercase italic">RitoMotors</span>
         </div>
         <button 
           onClick={() => setIsOpen(!isOpen)} 
-          className="p-2 text-slate-400 hover:text-white transition-colors"
+          className="p-2 text-white hover:text-toyota-red transition-colors"
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -46,10 +47,10 @@ const MobileTopbar = ({ user, profile }) => {
       {isOpen && (
         <>
           <div 
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-toyota-black/80 backdrop-blur-sm z-40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="bg-slate-900 border-b border-slate-800 p-4 space-y-2 absolute w-full z-50 shadow-2xl animate-in slide-in-from-top duration-200">
+          <div className="bg-white border-b border-gray-200 p-4 space-y-1 absolute w-full z-50 shadow-2xl animate-in slide-in-from-top duration-200">
             {filteredItems.length > 0 ? (
               filteredItems.map((item) => (
                 <NavLink
@@ -57,34 +58,36 @@ const MobileTopbar = ({ user, profile }) => {
                   to={item.path}
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) => `
-                    flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
+                    flex items-center gap-4 px-4 py-4 rounded-sm transition-all duration-200
                     ${isActive 
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
-                      : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'}
+                      ? 'bg-toyota-red text-white shadow-lg shadow-toyota-red/20' 
+                      : 'text-toyota-charcoal hover:bg-toyota-gray hover:text-toyota-black'}
                   `}
                 >
                   <item.icon size={20} />
-                  <span className="font-semibold">{item.name}</span>
+                  <span className="text-[11px] font-black uppercase tracking-widest">{item.name}</span>
                 </NavLink>
               ))
             ) : (
-              <div className="px-4 py-3 text-xs text-slate-500 italic text-center">
-                {!profile ? 'Loading profile...' : 'No access granted'}
+              <div className="px-4 py-4 text-[10px] text-gray-400 italic text-center uppercase font-black tracking-widest">
+                No access granted
               </div>
             )}
             
-            <div className="pt-4 mt-4 border-t border-slate-800">
-              <div className="px-4 py-3 mb-2 bg-slate-800/40 rounded-xl border border-slate-700/50">
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">User</p>
-                <p className="text-sm font-bold text-slate-100 truncate">{profile?.full_name || user?.email}</p>
-                <p className="text-[10px] text-blue-500 font-black uppercase mt-1">{profile?.role}</p>
+            <div className="pt-6 mt-4 border-t border-gray-100">
+              <div className="px-4 py-4 mb-4 bg-toyota-gray rounded-sm border border-gray-200">
+                <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Signed in as</p>
+                <p className="text-xs font-bold text-toyota-black truncate">{profile?.full_name || user?.email}</p>
+                <div className="mt-2 inline-flex items-center px-2 py-0.5 rounded-sm bg-toyota-red text-white text-[9px] font-black uppercase tracking-widest">
+                  {profile?.role}
+                </div>
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-200"
+                className="flex items-center gap-4 w-full px-4 py-4 rounded-sm text-toyota-red hover:bg-toyota-red hover:text-white transition-all duration-200"
               >
                 <LogOut size={20} />
-                <span className="font-semibold">Logout</span>
+                <span className="text-[11px] font-black uppercase tracking-widest">Logout</span>
               </button>
             </div>
           </div>

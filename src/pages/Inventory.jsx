@@ -144,11 +144,11 @@ const Inventory = () => {
   );
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500 font-sans">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Inventory Management</h1>
-          <p className="text-slate-400">Manage your vehicle stock and details.</p>
+          <h1 className="section-title">Inventory Management</h1>
+          <p className="text-[10px] font-black text-toyota-charcoal uppercase tracking-[0.2em] mt-2">Manage your vehicle stock and details.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
@@ -161,7 +161,7 @@ const Inventory = () => {
 
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-toyota-charcoal" size={18} />
           <input
             type="text"
             placeholder="Search by make, model, or VIN..."
@@ -173,7 +173,7 @@ const Inventory = () => {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3 text-red-500 text-sm">
+        <div className="p-4 bg-red-50/50 border border-toyota-red/20 rounded-sm flex items-center gap-3 text-toyota-red text-xs font-bold uppercase tracking-wider">
           <AlertCircle size={18} />
           <span>{error}</span>
         </div>
@@ -194,7 +194,7 @@ const Inventory = () => {
             {loading && !cars.length ? (
               <tr>
                 <td colSpan="5" className="table-cell text-center py-12">
-                  <Loader2 className="animate-spin mx-auto text-blue-500" size={32} />
+                  <Loader2 className="animate-spin mx-auto text-toyota-red" size={32} />
                 </td>
               </tr>
             ) : filteredCars.length > 0 ? (
@@ -202,23 +202,23 @@ const Inventory = () => {
                 <tr key={car.id} className="table-row">
                   <td className="table-cell">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-10 rounded bg-slate-800 flex-shrink-0 overflow-hidden border border-slate-700">
+                      <div className="w-12 h-10 rounded-sm bg-toyota-gray flex-shrink-0 overflow-hidden border border-gray-100">
                         {car.image_url ? (
                           <img src={car.image_url} alt={car.model} className="w-full h-full object-cover" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-slate-600">
+                          <div className="w-full h-full flex items-center justify-center text-gray-300">
                             <Car size={16} />
                           </div>
                         )}
                       </div>
                       <div>
-                        <div className="font-bold">{car.make} {car.model}</div>
-                        <div className="text-xs text-slate-500">{car.year}</div>
+                        <div className="font-black text-toyota-black uppercase text-xs tracking-tight">{car.make} {car.model}</div>
+                        <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{car.year}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="table-cell text-xs font-mono">{car.vin}</td>
-                  <td className="table-cell font-semibold">${Number(car.price).toLocaleString()}</td>
+                  <td className="table-cell text-[10px] font-black font-mono text-toyota-charcoal tracking-widest">{car.vin}</td>
+                  <td className="table-cell font-black text-toyota-red">${Number(car.price).toLocaleString()}</td>
                   <td className="table-cell">
                     <Badge variant={
                       car.status === 'Available' ? 'success' : 
@@ -231,13 +231,13 @@ const Inventory = () => {
                     <div className="flex items-center justify-end gap-2">
                       <button 
                         onClick={() => handleOpenModal(car)}
-                        className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-500/10 rounded-lg transition-all"
+                        className="p-2 text-gray-400 hover:text-toyota-red hover:bg-toyota-red/5 rounded-sm transition-all"
                       >
                         <Edit2 size={18} />
                       </button>
                       <button 
                         onClick={() => handleDelete(car.id)}
-                        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                        className="p-2 text-gray-400 hover:text-toyota-red hover:bg-toyota-red/5 rounded-sm transition-all"
                       >
                         <Trash2 size={18} />
                       </button>
@@ -247,7 +247,7 @@ const Inventory = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="table-cell text-center py-12 text-slate-500">
+                <td colSpan="5" className="table-cell text-center py-12 text-gray-400 font-bold uppercase text-[10px] tracking-widest">
                   No vehicles found matching your search.
                 </td>
               </tr>
@@ -258,11 +258,11 @@ const Inventory = () => {
 
       {/* Car Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl animate-in zoom-in-95 duration-200">
-            <div className="sticky top-0 bg-slate-900 p-6 border-b border-slate-800 flex items-center justify-between z-10">
-              <h2 className="text-xl font-bold">{editingCar ? 'Edit Vehicle' : 'Add New Vehicle'}</h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-100">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-toyota-black/80 backdrop-blur-sm">
+          <div className="bg-white border border-gray-200 rounded-sm w-full max-w-2xl max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="sticky top-0 bg-white p-6 border-b border-gray-100 flex items-center justify-between z-10">
+              <h2 className="text-xl font-black uppercase tracking-tight text-toyota-black">{editingCar ? 'Edit Vehicle' : 'Add New Vehicle'}</h2>
+              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-toyota-red transition-colors">
                 <X size={24} />
               </button>
             </div>
@@ -323,11 +323,11 @@ const Inventory = () => {
                     onChange={(e) => setFormData({...formData, image_url: e.target.value})} 
                     placeholder="https://your-supabase-url.com/storage/v1/object/public/cars/..."
                   />
-                  <p className="mt-1 text-[10px] text-slate-500 font-medium">
+                  <p className="mt-1 text-[9px] text-gray-500 font-bold uppercase tracking-widest">
                     Upload the correct car photo to Supabase Storage, then paste the public URL here.
                   </p>
                   {formData.image_url && (
-                    <div className="mt-2 w-full h-32 rounded-lg bg-slate-800 overflow-hidden border border-slate-700">
+                    <div className="mt-2 w-full h-32 rounded-sm bg-toyota-gray overflow-hidden border border-gray-100">
                       <img 
                         src={formData.image_url} 
                         alt="Preview" 

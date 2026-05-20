@@ -50,16 +50,16 @@ const CustomerLogs = () => {
   );
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500 font-sans">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Customer Logs</h1>
-          <p className="text-slate-400">View and manage all completed vehicle sales.</p>
+          <h1 className="section-title">Customer Logs</h1>
+          <p className="text-[10px] font-black text-toyota-charcoal uppercase tracking-[0.2em] mt-2">View and manage all completed vehicle sales.</p>
         </div>
       </div>
 
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-toyota-charcoal" size={18} />
         <input
           type="text"
           placeholder="Search by customer name, email, or invoice number..."
@@ -70,7 +70,7 @@ const CustomerLogs = () => {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3 text-red-500 text-sm">
+        <div className="p-4 bg-red-50 border border-toyota-red/20 rounded-sm flex items-center gap-3 text-toyota-red text-[10px] font-bold uppercase tracking-wider">
           <AlertCircle size={18} />
           <span>{error}</span>
         </div>
@@ -93,33 +93,33 @@ const CustomerLogs = () => {
             {loading && !sales.length ? (
               <tr>
                 <td colSpan="7" className="table-cell text-center py-12">
-                  <Loader2 className="animate-spin mx-auto text-blue-500" size={32} />
+                  <Loader2 className="animate-spin mx-auto text-toyota-red" size={32} />
                 </td>
               </tr>
             ) : filteredSales.length > 0 ? (
               filteredSales.map((sale) => (
                 <tr key={sale.id} className="table-row">
-                  <td className="table-cell font-mono text-blue-500 font-bold">{sale.invoice_no}</td>
+                  <td className="table-cell font-mono text-toyota-red font-black text-[10px] tracking-widest">{sale.invoice_no}</td>
                   <td className="table-cell">
-                    <div className="font-bold">{sale.customer_name}</div>
-                    <div className="text-xs text-slate-500">{sale.customer_email}</div>
+                    <div className="font-black text-toyota-black uppercase text-xs tracking-tight">{sale.customer_name}</div>
+                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{sale.customer_email}</div>
                   </td>
                   <td className="table-cell">
-                    <div className="text-sm">
+                    <div className="text-[10px] font-black text-toyota-charcoal uppercase tracking-widest">
                       {sale.cars?.year} {sale.cars?.make} {sale.cars?.model}
                     </div>
                   </td>
                   <td className="table-cell">
                     <Badge variant="info">{sale.payment_method}</Badge>
                   </td>
-                  <td className="table-cell font-bold">${Number(sale.grand_total).toLocaleString()}</td>
-                  <td className="table-cell text-slate-400 text-sm">
+                  <td className="table-cell font-black text-toyota-black tracking-tight">${Number(sale.grand_total).toLocaleString()}</td>
+                  <td className="table-cell text-gray-400 text-[10px] font-bold uppercase tracking-widest">
                     {new Date(sale.created_at).toLocaleDateString()}
                   </td>
                   <td className="table-cell text-right">
                     <button 
                       onClick={() => navigate(`/invoice/${sale.id}`)}
-                      className="btn-secondary py-1.5 px-3 flex items-center gap-2 text-xs ml-auto"
+                      className="btn-secondary py-1.5 px-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ml-auto"
                     >
                       <Eye size={14} />
                       View Invoice
@@ -129,7 +129,7 @@ const CustomerLogs = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="table-cell text-center py-12 text-slate-500">
+                <td colSpan="7" className="table-cell text-center py-12 text-gray-400 font-bold uppercase text-[10px] tracking-widest">
                   No sales records found.
                 </td>
               </tr>

@@ -34,86 +34,78 @@ const Sidebar = ({ user, profile, collapsed, setCollapsed }) => {
 
   const filteredItems = menuItems.filter(item => {
     if (!profile?.role) return false;
-    // Normalize and match exact roles: Admin or Sales Agent
     return item.roles.includes(profile.role);
   });
 
   return (
-    <aside className={`hidden md:flex flex-col bg-slate-900 border-r border-slate-800 transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
-      <div className="p-6 flex items-center justify-between">
+    <aside className={`hidden md:flex flex-col bg-toyota-black text-white transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
+      <div className="p-6 flex items-center justify-between border-b border-white/10">
         {!collapsed ? (
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-xl text-white">R</div>
-            <span className="font-bold text-xl tracking-tight text-white">RitoMotors</span>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-toyota-red rounded-sm flex items-center justify-center font-black text-xl text-white italic">R</div>
+            <span className="font-black text-xl tracking-tighter uppercase italic">RitoMotors</span>
           </div>
         ) : (
-          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-xl text-white mx-auto shadow-lg shadow-blue-600/20">R</div>
+          <div className="w-10 h-10 bg-toyota-red rounded-sm flex items-center justify-center font-black text-xl text-white italic mx-auto">R</div>
         )}
       </div>
 
-      <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto no-scrollbar">
+      <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto no-scrollbar">
         {profile ? (
-          filteredItems.length > 0 ? (
-            filteredItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) => `
-                  flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group
-                  ${isActive 
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
-                    : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-100'}
-                  ${collapsed ? 'justify-center' : ''}
-                `}
-                title={collapsed ? item.name : ''}
-              >
-                <item.icon size={22} className={collapsed ? '' : 'min-w-[22px]'} />
-                {!collapsed && <span className="font-semibold whitespace-nowrap">{item.name}</span>}
-              </NavLink>
-            ))
-          ) : (
-            <div className="px-3 py-2 text-xs text-red-400 text-center bg-red-500/10 rounded-lg border border-red-500/20">
-              Access restricted. Role: {profile.role || 'None'}
-            </div>
-          )
+          filteredItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) => `
+                flex items-center gap-3 px-3 py-3 rounded-sm transition-all duration-200 group relative
+                ${isActive 
+                  ? 'bg-toyota-red text-white shadow-lg shadow-toyota-red/20' 
+                  : 'text-gray-400 hover:bg-white/5 hover:text-white'}
+                ${collapsed ? 'justify-center' : ''}
+              `}
+              title={collapsed ? item.name : ''}
+            >
+              <item.icon size={20} className={collapsed ? '' : 'min-w-[20px]'} />
+              {!collapsed && <span className="text-[11px] font-black uppercase tracking-widest">{item.name}</span>}
+              {/* Indicator line for active state when not collapsed */}
+              {!collapsed && (
+                <div className={`absolute left-0 w-1 h-6 bg-white rounded-r-full transition-opacity duration-200 opacity-0 group-[.active]:opacity-100`} />
+              )}
+            </NavLink>
+          ))
         ) : (
-          <div className="px-4 py-6 text-center space-y-4">
-            <div className="p-3 bg-red-500/10 rounded-xl border border-red-500/20">
-              <p className="text-xs font-bold text-red-500 uppercase tracking-widest mb-1">Error</p>
-              <p className="text-[11px] text-red-400 leading-tight">
-                Profile not found. Please add this user to the profiles table.
-              </p>
-            </div>
+          <div className="px-4 py-3 text-[10px] text-gray-500 text-center uppercase font-black tracking-widest">
+            Loading...
           </div>
         )}
       </nav>
 
-      <div className="p-4 border-t border-slate-800 space-y-4 bg-slate-900/50">
+      <div className="p-4 border-t border-white/10 space-y-4 bg-toyota-charcoal/30">
         {!collapsed && (
-          <div className="px-3 py-3 bg-slate-800/40 rounded-xl border border-slate-700/50">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Signed in as</p>
-            <p className="text-sm font-bold text-slate-100 truncate">{profile?.full_name || user?.email}</p>
-            <div className="mt-2 inline-flex items-center px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20">
-              <span className="text-[10px] text-blue-400 font-black uppercase tracking-tighter">{profile?.role || 'NO ROLE'}</span>
+          <div className="px-3 py-3 bg-white/5 rounded-sm border border-white/10">
+            <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">User Profile</p>
+            <p className="text-xs font-bold text-white truncate">{profile?.full_name || user?.email}</p>
+            <div className="mt-2 inline-flex items-center px-2 py-0.5 rounded-sm bg-toyota-red text-[9px] font-black uppercase tracking-widest">
+              {profile?.role || 'Guest'}
             </div>
           </div>
         )}
         
-        <div className="space-y-2">
+        <div className="space-y-1">
           <button
             onClick={handleLogout}
-            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 group ${collapsed ? 'justify-center' : ''}`}
+            className={`flex items-center gap-3 w-full px-3 py-3 rounded-sm text-gray-400 hover:bg-red-600 hover:text-white transition-all duration-200 group ${collapsed ? 'justify-center' : ''}`}
             title={collapsed ? 'Logout' : ''}
           >
-            <LogOut size={22} />
-            {!collapsed && <span className="font-semibold">Logout</span>}
+            <LogOut size={20} />
+            {!collapsed && <span className="text-[11px] font-black uppercase tracking-widest">Logout</span>}
           </button>
 
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="flex items-center justify-center w-full p-2 text-slate-500 hover:text-blue-500 transition-colors rounded-lg hover:bg-slate-800/50"
+            className="flex items-center justify-center w-full p-2 text-gray-500 hover:text-white transition-colors"
           >
-            {collapsed ? <ChevronRight size={20} /> : <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest"><ChevronLeft size={16} /> Collapse</div>}
+            {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           </button>
         </div>
       </div>
