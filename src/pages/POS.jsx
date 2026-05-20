@@ -13,7 +13,8 @@ import {
   Plus,
   Minus,
   X,
-  CheckCircle2
+  CheckCircle2,
+  Car
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import Input from '../components/Input';

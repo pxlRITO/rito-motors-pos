@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Car } from 'lucide-react';
 
 // Pages
 import Login from './pages/Login';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Menu, X, LogOut, LayoutDashboard, Car, ShoppingCart, Users, BarChart3, MessageSquare } from 'lucide-react';
+import { Menu, X, LogOut, LayoutDashboard, Car, ShoppingCart, Users, BarChart3, MessageSquare, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 const MobileTopbar = ({ user, profile }) => {
