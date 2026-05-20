@@ -28,19 +28,49 @@ const Invoice = () => {
   const fetchSaleDetails = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      setError(null);
+      
+      // 1. Fetch the sale by ID
+      const { data: saleData, error: saleError } = await supabase
         .from('sales')
-        .select(`
-          *,
-          cars (*),
-          profiles:agent_id (full_name)
-        `)
+        .select('*')
         .eq('id', id)
         .single();
 
-      if (error) throw error;
-      setSale(data);
+      if (saleError) throw saleError;
+      if (!saleData) throw new Error('Sale not found');
+
+      // 2. Fetch the related car separately
+      const { data: carData, error: carError } = await supabase
+        .from('cars')
+        .select('*')
+        .eq('id', saleData.car_id)
+        .single();
+
+      if (carError) console.error('Error fetching car:', carError);
+
+      // 3. Fetch the agent profile separately
+      let agentData = null;
+      if (saleData.agent_id) {
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', saleData.agent_id)
+          .single();
+        
+        if (profileError) console.error('Error fetching agent profile:', profileError);
+        else agentData = profileData;
+      }
+
+      // 4. Combine data manually
+      setSale({
+        ...saleData,
+        cars: carData,
+        agent_name: agentData?.full_name || 'Sales Agent'
+      });
+
     } catch (err) {
+      console.error('Invoice fetch error:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -128,7 +158,7 @@ const Invoice = () => {
           </div>
           <div className="md:text-right">
             <p className="text-[10px] font-black text-toyota-red uppercase tracking-[0.2em] mb-3">Sales Agent</p>
-            <h3 className="text-xl font-black uppercase tracking-tight text-toyota-black">{sale.profiles?.full_name || 'System User'}</h3>
+            <h3 className="text-xl font-black uppercase tracking-tight text-toyota-black">{sale.agent_name}</h3>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">RitoMotors Representative</p>
           </div>
         </div>
