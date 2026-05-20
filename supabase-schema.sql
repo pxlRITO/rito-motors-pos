@@ -91,6 +91,7 @@ create table customer_inquiries (
   message text,
   staff_message text,
   status text check (status in ('Pending', 'Contacted', 'Converted', 'Cancelled')) default 'Pending',
+  customization jsonb default '{}',
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 

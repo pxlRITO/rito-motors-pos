@@ -12,7 +12,14 @@ import {
   CheckCircle2,
   Tag,
   Zap,
-  ArrowRight
+  ArrowRight,
+  ChevronDown,
+  ChevronUp,
+  Settings,
+  Palette,
+  Disc,
+  Layers,
+  Wind
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import Input from '../components/Input';
@@ -115,6 +122,7 @@ const Showroom = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showCustomizer, setShowCustomizer] = useState(false);
 
   const [formData, setFormData] = useState({
     customer_name: '',
@@ -122,6 +130,15 @@ const Showroom = () => {
     customer_email: '',
     payment_method: 'Cash',
     message: ''
+  });
+
+  const [customization, setCustomization] = useState({
+    exteriorColor: 'White',
+    wheelStyle: 'Standard',
+    interiorColor: 'Black',
+    stitchingColor: 'Black',
+    tint: 'None',
+    addons: []
   });
 
   useEffect(() => {
@@ -184,7 +201,8 @@ const Showroom = () => {
       const inquiryData = {
         ...formData,
         car_id: selectedCar.id,
-        customer_id: user?.id || null
+        customer_id: user?.id || null,
+        customization: customization
       };
 
       const { error } = await supabase
@@ -200,9 +218,18 @@ const Showroom = () => {
         payment_method: 'Cash',
         message: ''
       });
+      setCustomization({
+        exteriorColor: 'White',
+        wheelStyle: 'Standard',
+        interiorColor: 'Black',
+        stitchingColor: 'Black',
+        tint: 'None',
+        addons: []
+      });
       setTimeout(() => {
         setIsModalOpen(false);
         setSuccess(false);
+        setShowCustomizer(false);
       }, 3000);
     } catch (err) {
       setError(err.message);
@@ -353,7 +380,7 @@ const Showroom = () => {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-2 h-2 bg-toyota-red rounded-full animate-pulse" />
-                      <h2 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] leading-none">Vehicle Inquiry Form</h2>
+                      <h2 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] leading-none">Vehicle Inquiry & Customization</h2>
                     </div>
                     <p className="text-xl font-black text-toyota-black uppercase tracking-tight">{selectedCar?.make} {selectedCar?.model}</p>
                   </div>
@@ -362,8 +389,121 @@ const Showroom = () => {
                   </button>
                 </div>
                 
-                <form onSubmit={handleSubmit} className="p-10 space-y-8">
-                  <div className="space-y-6">
+                <form onSubmit={handleSubmit} className="p-10 space-y-10 overflow-y-auto max-h-[70vh] no-scrollbar">
+                  {/* Customization Toggle */}
+                  <div className="space-y-4">
+                    <button 
+                      type="button"
+                      onClick={() => setShowCustomizer(!showCustomizer)}
+                      className="w-full flex items-center justify-between p-4 bg-white border border-toyota-red/20 rounded-sm group hover:border-toyota-red transition-all shadow-sm"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Settings className="text-toyota-red group-hover:rotate-90 transition-transform duration-500" size={20} />
+                        <span className="font-black uppercase tracking-[0.2em] text-[10px] text-toyota-black">Configure Your Vehicle</span>
+                      </div>
+                      {showCustomizer ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </button>
+
+                    {showCustomizer && (
+                      <div className="p-6 bg-toyota-gray rounded-sm space-y-8 animate-in slide-in-from-top-4 duration-300">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <Select 
+                            label="Exterior Color"
+                            icon={<Palette size={14} className="text-toyota-red" />}
+                            value={customization.exteriorColor}
+                            onChange={(e) => setCustomization({...customization, exteriorColor: e.target.value})}
+                            options={['White', 'Black', 'Red', 'Blue', 'Silver', 'Gray'].map(c => ({ label: c, value: c }))}
+                          />
+                          <Select 
+                            label="Wheel Style"
+                            icon={<Disc size={14} className="text-toyota-red" />}
+                            value={customization.wheelStyle}
+                            onChange={(e) => setCustomization({...customization, wheelStyle: e.target.value})}
+                            options={['Standard', 'Sport', 'Premium Black', 'Chrome'].map(c => ({ label: c, value: c }))}
+                          />
+                          <Select 
+                            label="Interior Color"
+                            icon={<Layers size={14} className="text-toyota-red" />}
+                            value={customization.interiorColor}
+                            onChange={(e) => setCustomization({...customization, interiorColor: e.target.value})}
+                            options={['Black', 'Beige', 'Red', 'Brown'].map(c => ({ label: c, value: c }))}
+                          />
+                          <Select 
+                            label="Stitching Color"
+                            value={customization.stitchingColor}
+                            onChange={(e) => setCustomization({...customization, stitchingColor: e.target.value})}
+                            options={['Black', 'Red', 'White', 'Blue'].map(c => ({ label: c, value: c }))}
+                          />
+                          <Select 
+                            label="Window Tint"
+                            icon={<Wind size={14} className="text-toyota-red" />}
+                            value={customization.tint}
+                            onChange={(e) => setCustomization({...customization, tint: e.target.value})}
+                            options={['None', 'Light', 'Medium', 'Dark'].map(c => ({ label: c, value: c }))}
+                          />
+                        </div>
+
+                        <div className="space-y-4">
+                          <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Premium Add-ons</p>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            {['Spoiler', 'Body Kit', 'Dashcam', 'Ceramic Coating', 'Premium Sound', 'Leather Seats'].map(addon => (
+                              <label key={addon} className="flex items-center gap-2 p-3 bg-white border border-gray-100 rounded-sm cursor-pointer hover:border-toyota-red/30 transition-all">
+                                <input 
+                                  type="checkbox"
+                                  className="accent-toyota-red w-3 h-3"
+                                  checked={customization.addons.includes(addon)}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setCustomization({...customization, addons: [...customization.addons, addon]});
+                                    } else {
+                                      setCustomization({...customization, addons: customization.addons.filter(a => a !== addon)});
+                                    }
+                                  }}
+                                />
+                                <span className="text-[9px] font-black uppercase tracking-widest text-toyota-charcoal">{addon}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Summary Panel */}
+                        <div className="mt-8 p-6 bg-toyota-black text-white rounded-sm space-y-4 shadow-xl border-l-4 border-toyota-red">
+                          <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-toyota-red">Live Configuration</p>
+                            <p className="text-[8px] font-bold text-gray-500 uppercase tracking-widest italic">Update Instant</p>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                              <p className="text-[7px] font-black text-gray-500 uppercase tracking-widest">Exterior</p>
+                              <p className="text-[10px] font-black uppercase tracking-wider">{customization.exteriorColor}</p>
+                            </div>
+                            <div className="space-y-1">
+                              <p className="text-[7px] font-black text-gray-500 uppercase tracking-widest">Wheels</p>
+                              <p className="text-[10px] font-black uppercase tracking-wider">{customization.wheelStyle}</p>
+                            </div>
+                            <div className="space-y-1">
+                              <p className="text-[7px] font-black text-gray-500 uppercase tracking-widest">Interior</p>
+                              <p className="text-[10px] font-black uppercase tracking-wider">{customization.interiorColor} / {customization.stitchingColor}</p>
+                            </div>
+                            <div className="space-y-1">
+                              <p className="text-[7px] font-black text-gray-500 uppercase tracking-widest">Glass</p>
+                              <p className="text-[10px] font-black uppercase tracking-wider">{customization.tint} Tint</p>
+                            </div>
+                          </div>
+                          {customization.addons.length > 0 && (
+                            <div className="pt-3 border-t border-white/10">
+                              <p className="text-[7px] font-black text-gray-500 uppercase tracking-widest mb-1">Extras</p>
+                              <p className="text-[9px] font-medium text-gray-300 italic truncate">
+                                {customization.addons.join(', ')}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-8 pt-6 border-t border-gray-100">
                     {!user && (
                       <div className="p-4 bg-toyota-red/5 border border-toyota-red/10 rounded-sm flex items-start gap-4">
                         <Info size={20} className="text-toyota-red shrink-0" />
@@ -377,6 +517,11 @@ const Showroom = () => {
                         </div>
                       </div>
                     )}
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-6 bg-toyota-red" />
+                      <h3 className="font-black uppercase tracking-[0.2em] text-[10px] text-toyota-black">Customer Information</h3>
+                    </div>
                     
                     <div className="grid grid-cols-1 gap-6">
                       <Input 

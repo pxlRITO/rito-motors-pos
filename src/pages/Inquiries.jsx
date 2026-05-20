@@ -231,6 +231,53 @@ const Inquiries = () => {
                   </div>
                 </div>
 
+                {/* Customization Request */}
+                <div className="space-y-2">
+                  <p className="text-[10px] font-black text-toyota-red uppercase tracking-widest">Customization Request</p>
+                  <div className="p-4 bg-white border border-gray-100 rounded-sm shadow-sm space-y-3">
+                    {selectedInquiry.customization && Object.keys(selectedInquiry.customization).length > 0 ? (
+                      <>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-[7px] font-black text-gray-400 uppercase tracking-widest">Exterior</p>
+                            <p className="text-[10px] font-black text-toyota-black uppercase">{selectedInquiry.customization.exteriorColor}</p>
+                          </div>
+                          <div>
+                            <p className="text-[7px] font-black text-gray-400 uppercase tracking-widest">Wheels</p>
+                            <p className="text-[10px] font-black text-toyota-black uppercase">{selectedInquiry.customization.wheelStyle}</p>
+                          </div>
+                          <div>
+                            <p className="text-[7px] font-black text-gray-400 uppercase tracking-widest">Interior</p>
+                            <p className="text-[10px] font-black text-toyota-black uppercase">{selectedInquiry.customization.interiorColor}</p>
+                          </div>
+                          <div>
+                            <p className="text-[7px] font-black text-gray-400 uppercase tracking-widest">Stitching</p>
+                            <p className="text-[10px] font-black text-toyota-black uppercase">{selectedInquiry.customization.stitchingColor}</p>
+                          </div>
+                          <div>
+                            <p className="text-[7px] font-black text-gray-400 uppercase tracking-widest">Tint</p>
+                            <p className="text-[10px] font-black text-toyota-black uppercase">{selectedInquiry.customization.tint}</p>
+                          </div>
+                        </div>
+                        {selectedInquiry.customization.addons?.length > 0 && (
+                          <div className="pt-2 border-t border-gray-50">
+                            <p className="text-[7px] font-black text-gray-400 uppercase tracking-widest mb-1">Add-ons</p>
+                            <div className="flex flex-wrap gap-1">
+                              {selectedInquiry.customization.addons.map((addon, i) => (
+                                <span key={i} className="px-1.5 py-0.5 bg-toyota-gray text-[8px] font-bold uppercase text-toyota-charcoal rounded-sm">
+                                  {addon}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <p className="text-[10px] text-gray-400 italic">No customization selected.</p>
+                    )}
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <p className="text-[10px] font-black text-toyota-red uppercase tracking-widest">Staff Message (Visible to Customer)</p>
                   <textarea 

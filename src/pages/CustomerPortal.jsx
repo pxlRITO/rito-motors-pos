@@ -99,31 +99,60 @@ const CustomerPortal = ({ user, profile }) => {
   const latestStaffUpdate = inquiries.find(i => i.staff_message)?.staff_message || 'No staff response yet.';
 
   const StatusTimeline = ({ currentStatus }) => {
-    const statuses = ['Pending', 'Contacted', 'Converted'];
-    const currentIndex = statuses.indexOf(currentStatus);
+    const statuses = [
+      { id: 'Pending', label: 'Pending', color: 'bg-amber-500', shadow: 'shadow-[0_0_10px_rgba(245,158,11,0.4)]' },
+      { id: 'Contacted', label: 'Contacted', color: 'bg-blue-500', shadow: 'shadow-[0_0_10px_rgba(59,130,246,0.4)]' },
+      { id: 'Converted', label: 'Converted', color: 'bg-emerald-500', shadow: 'shadow-[0_0_10px_rgba(16,185,129,0.4)]' }
+    ];
+    
+    const currentIndex = statuses.findIndex(s => s.id === currentStatus);
     const isCancelled = currentStatus === 'Cancelled';
 
     if (isCancelled) {
       return (
-        <div className="flex items-center gap-2 text-toyota-red font-black uppercase text-[8px] tracking-widest">
-          <XCircle size={12} /> Inquiry Cancelled
+        <div className="flex items-center gap-3 px-4 py-2 bg-red-50 border border-red-100 rounded-sm text-toyota-red font-black uppercase text-[10px] tracking-widest animate-in fade-in zoom-in-95 duration-300">
+          <XCircle size={16} /> 
+          <span>Inquiry Cancelled</span>
         </div>
       );
     }
 
     return (
-      <div className="flex items-center w-full max-w-xs gap-1">
-        {statuses.map((status, idx) => (
-          <React.Fragment key={status}>
-            <div className="flex flex-col items-center gap-1 flex-1">
-              <div className={`w-2 h-2 rounded-full ${idx <= currentIndex ? 'bg-toyota-red shadow-[0_0_8px_rgba(235,10,30,0.4)]' : 'bg-gray-200'}`} />
-              <span className={`text-[7px] font-black uppercase tracking-tighter ${idx <= currentIndex ? 'text-toyota-black' : 'text-gray-300'}`}>{status}</span>
-            </div>
-            {idx < statuses.length - 1 && (
-              <div className={`h-[1px] flex-1 mb-3 ${idx < currentIndex ? 'bg-toyota-red' : 'bg-gray-200'}`} />
-            )}
-          </React.Fragment>
-        ))}
+      <div className="flex items-center w-full max-w-sm gap-0 pt-2">
+        {statuses.map((status, idx) => {
+          const isCompleted = idx < currentIndex;
+          const isCurrent = idx === currentIndex;
+          const isInactive = idx > currentIndex;
+          
+          let circleClass = 'bg-gray-200';
+          let labelClass = 'text-gray-300';
+          let lineClass = 'bg-gray-200';
+
+          if (isCurrent) {
+            circleClass = `${status.color} ${status.shadow} scale-125`;
+            labelClass = 'text-toyota-black font-black scale-105';
+          } else if (isCompleted) {
+            circleClass = status.color;
+            labelClass = 'text-toyota-charcoal font-bold';
+            lineClass = status.color;
+          }
+
+          return (
+            <React.Fragment key={status.id}>
+              <div className="flex flex-col items-center gap-2 flex-1 relative">
+                <div className={`w-3 h-3 rounded-full transition-all duration-500 relative z-10 ${circleClass}`} />
+                <span className={`text-[9px] uppercase tracking-wider transition-all duration-500 text-center whitespace-nowrap ${labelClass}`}>
+                  {status.label}
+                </span>
+              </div>
+              {idx < statuses.length - 1 && (
+                <div className="flex-1 px-1 mb-5">
+                  <div className={`h-[2px] w-full transition-all duration-700 ${lineClass}`} />
+                </div>
+              )}
+            </React.Fragment>
+          );
+        })}
       </div>
     );
   };
