@@ -49,6 +49,7 @@ const App = () => {
 
   const fetchProfile = async (userId) => {
     try {
+      setLoading(true);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -57,14 +58,15 @@ const App = () => {
 
       if (error) {
         console.error('Error fetching profile:', error.message);
-        setProfile(null);
+        // If profile doesn't exist, we might want to treat them as a Guest
+        setProfile({ role: 'Guest' });
       } else {
         console.log('Fetched Profile:', data);
         setProfile(data);
       }
     } catch (err) {
       console.error('Unexpected error fetching profile:', err);
-      setProfile(null);
+      setProfile({ role: 'Guest' });
     } finally {
       setLoading(false);
     }
@@ -72,10 +74,10 @@ const App = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 gap-4">
-        <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center font-bold text-3xl animate-pulse">R</div>
-        <Loader2 className="animate-spin text-blue-500" size={32} />
-        <p className="text-slate-400 font-medium animate-pulse">Initializing RitoMotors POS...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-toyota-gray gap-4">
+        <div className="w-16 h-16 bg-toyota-red rounded-sm flex items-center justify-center font-black text-3xl text-white italic shadow-lg shadow-toyota-red/20 animate-pulse">R</div>
+        <Loader2 className="animate-spin text-toyota-red" size={32} />
+        <p className="text-toyota-charcoal font-black uppercase tracking-[0.2em] text-[10px] animate-pulse">Initializing RitoMotors POS...</p>
       </div>
     );
   }
@@ -88,8 +90,19 @@ const App = () => {
       return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    if (roles.length > 0 && profile && !roles.includes(profile.role)) {
-      return <Navigate to="/" replace />;
+    // Wait for profile to load if session exists
+    if (!profile) return null;
+
+    // If role is Guest or unknown, they shouldn't be in protected routes (except maybe showroom)
+    if (profile.role === 'Guest' || !['Admin', 'Sales Agent', 'Customer'].includes(profile.role)) {
+      return <Navigate to="/showroom" replace />;
+    }
+
+    if (roles.length > 0 && !roles.includes(profile.role)) {
+      // Redirect based on role if they try to access unauthorized area
+      if (profile.role === 'Customer') return <Navigate to="/customer" replace />;
+      if (['Admin', 'Sales Agent'].includes(profile.role)) return <Navigate to="/" replace />;
+      return <Navigate to="/showroom" replace />;
     }
 
     return children;
@@ -104,7 +117,7 @@ const App = () => {
         
         <Route path="/*" element={
           <ProtectedRoute>
-            <div className="flex flex-col md:flex-row min-h-screen bg-slate-950 text-slate-100">
+            <div className="flex flex-col md:flex-row min-h-screen bg-toyota-gray text-toyota-black font-sans">
               <Sidebar 
                 user={session?.user} 
                 profile={profile} 
@@ -117,7 +130,13 @@ const App = () => {
                 <div className="max-w-7xl mx-auto">
                   <Routes>
                     <Route path="/" element={
-                      profile?.role === 'Customer' ? <Navigate to="/customer" replace /> : <Dashboard />
+                      profile?.role === 'Customer' ? (
+                        <Navigate to="/customer" replace />
+                      ) : ['Admin', 'Sales Agent'].includes(profile?.role) ? (
+                        <Dashboard />
+                      ) : (
+                        <Navigate to="/showroom" replace />
+                      )
                     } />
                     
                     <Route path="/inventory" element={
@@ -132,7 +151,11 @@ const App = () => {
                       </ProtectedRoute>
                     } />
                     <Route path="/invoice/:id" element={<Invoice />} />
-                    <Route path="/customers" element={<CustomerLogs />} />
+                    <Route path="/customers" element={
+                      <ProtectedRoute roles={['Admin', 'Sales Agent']}>
+                        <CustomerLogs />
+                      </ProtectedRoute>
+                    } />
                     <Route path="/inquiries" element={
                       <ProtectedRoute roles={['Admin', 'Sales Agent']}>
                         <Inquiries />

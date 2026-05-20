@@ -200,9 +200,9 @@ const Inquiries = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Staff Message (Visible to Customer)</p>
+                  <p className="text-[10px] font-black text-toyota-red uppercase tracking-widest">Staff Message (Visible to Customer)</p>
                   <textarea 
-                    className="input min-h-[80px] py-3 resize-none bg-slate-950 border-slate-800 text-sm"
+                    className="input min-h-[80px] py-3 resize-none bg-toyota-gray border-gray-100 text-xs font-medium text-toyota-charcoal"
                     value={selectedInquiry.staff_message || ''}
                     onChange={(e) => {
                       const val = e.target.value;
@@ -238,26 +238,26 @@ const Inquiries = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Vehicle Details</p>
-                  <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center">
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Vehicle Interest</p>
+                  <div className="p-4 bg-toyota-gray rounded-sm border border-gray-100 flex justify-between items-center">
                     <div>
-                      <p className="text-sm font-bold text-slate-100">{selectedInquiry.cars?.make} {selectedInquiry.cars?.model}</p>
-                      <p className="text-xs text-slate-500">{selectedInquiry.cars?.year} Model</p>
+                      <p className="text-sm font-black text-toyota-black uppercase tracking-tight">{selectedInquiry.cars?.make} {selectedInquiry.cars?.model}</p>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{selectedInquiry.cars?.year} Model</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-black text-blue-500">${Number(selectedInquiry.cars?.price).toLocaleString()}</p>
+                      <p className="text-sm font-black text-toyota-red tracking-tighter">${Number(selectedInquiry.cars?.price).toLocaleString()}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3 pt-6 border-t border-slate-800">
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Update Inquiry Status</p>
+              <div className="space-y-3 pt-6 border-t border-gray-100">
+                <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Update Inquiry Status</p>
                 <div className="grid grid-cols-2 gap-2">
                   <button 
                     disabled={updating}
                     onClick={() => handleUpdateStatus(selectedInquiry.id, 'Contacted')}
-                    className="btn-secondary py-2 text-xs flex items-center justify-center gap-2 hover:bg-blue-500/10 hover:text-blue-400 border-slate-800"
+                    className="btn-secondary py-2 text-[10px] flex items-center justify-center gap-2 hover:bg-toyota-red/5 hover:text-toyota-red border-gray-100"
                   >
                     <Phone size={14} />
                     Contacted
@@ -265,7 +265,7 @@ const Inquiries = () => {
                   <button 
                     disabled={updating}
                     onClick={() => handleUpdateStatus(selectedInquiry.id, 'Converted')}
-                    className="btn-secondary py-2 text-xs flex items-center justify-center gap-2 hover:bg-emerald-500/10 hover:text-emerald-400 border-slate-800"
+                    className="btn-secondary py-2 text-[10px] flex items-center justify-center gap-2 hover:bg-emerald-50 hover:text-emerald-600 border-gray-100"
                   >
                     <CheckCircle2 size={14} />
                     Converted
@@ -273,7 +273,7 @@ const Inquiries = () => {
                   <button 
                     disabled={updating}
                     onClick={() => handleUpdateStatus(selectedInquiry.id, 'Cancelled')}
-                    className="btn-secondary py-2 text-xs flex items-center justify-center gap-2 hover:bg-red-500/10 hover:text-red-400 border-slate-800"
+                    className="btn-secondary py-2 text-[10px] flex items-center justify-center gap-2 hover:bg-red-50 hover:text-toyota-red border-gray-100"
                   >
                     <XCircle size={14} />
                     Cancelled
@@ -281,7 +281,7 @@ const Inquiries = () => {
                   <button 
                     disabled={updating}
                     onClick={() => handleUpdateStatus(selectedInquiry.id, 'Pending')}
-                    className="btn-secondary py-2 text-xs flex items-center justify-center gap-2 hover:bg-amber-500/10 hover:text-amber-400 border-slate-800"
+                    className="btn-secondary py-2 text-[10px] flex items-center justify-center gap-2 hover:bg-amber-50 hover:text-amber-600 border-gray-100"
                   >
                     <Clock size={14} />
                     Pending
@@ -290,13 +290,13 @@ const Inquiries = () => {
               </div>
             </div>
           ) : (
-            <div className="card p-12 text-center border-dashed flex flex-col items-center justify-center space-y-4">
-              <div className="w-16 h-16 bg-slate-800/50 rounded-full flex items-center justify-center text-slate-600">
+            <div className="card p-12 text-center border-dashed flex flex-col items-center justify-center space-y-4 bg-white/50">
+              <div className="w-16 h-16 bg-toyota-gray rounded-full flex items-center justify-center text-gray-300">
                 <MessageSquare size={32} />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-300">No Inquiry Selected</h3>
-                <p className="text-xs text-slate-500 mt-1">Select an inquiry from the list to view details and manage status.</p>
+                <h3 className="text-sm font-black text-toyota-black uppercase tracking-widest">No Inquiry Selected</h3>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Select an inquiry from the list to view details.</p>
               </div>
             </div>
           )}

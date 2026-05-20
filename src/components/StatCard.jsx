@@ -6,7 +6,6 @@ const StatCard = ({ title, value, icon: Icon, trend, color = 'red' }) => {
     red: 'text-toyota-red bg-red-50',
     emerald: 'text-emerald-600 bg-emerald-50',
     amber: 'text-amber-600 bg-amber-50',
-    blue: 'text-blue-600 bg-blue-50',
     black: 'text-toyota-black bg-gray-100',
   };
 

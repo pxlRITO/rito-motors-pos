@@ -37,6 +37,8 @@ const Sidebar = ({ user, profile, collapsed, setCollapsed }) => {
     return item.roles.includes(profile.role);
   });
 
+  const hasAccess = profile && ['Admin', 'Sales Agent', 'Customer'].includes(profile.role);
+
   return (
     <aside className={`hidden md:flex flex-col bg-toyota-black text-white transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
       <div className="p-6 flex items-center justify-between border-b border-white/10">
@@ -51,7 +53,7 @@ const Sidebar = ({ user, profile, collapsed, setCollapsed }) => {
       </div>
 
       <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto no-scrollbar">
-        {profile ? (
+        {hasAccess ? (
           filteredItems.map((item) => (
             <NavLink
               key={item.path}
@@ -73,9 +75,29 @@ const Sidebar = ({ user, profile, collapsed, setCollapsed }) => {
               )}
             </NavLink>
           ))
+        ) : profile ? (
+          <div className="px-4 py-8 text-center space-y-4">
+            <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto text-gray-500">
+              <Car size={20} />
+            </div>
+            {!collapsed && (
+              <div className="space-y-2">
+                <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest leading-relaxed">
+                  No active roles assigned to this account
+                </p>
+                <button 
+                  onClick={() => navigate('/showroom')}
+                  className="text-[9px] text-toyota-red font-black uppercase tracking-widest hover:underline"
+                >
+                  View Showroom
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
-          <div className="px-4 py-3 text-[10px] text-gray-500 text-center uppercase font-black tracking-widest">
-            Loading...
+          <div className="flex flex-col items-center justify-center py-12 gap-3 opacity-50">
+            <Loader2 className="animate-spin text-toyota-red" size={24} />
+            {!collapsed && <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest">Synchronizing...</p>}
           </div>
         )}
       </nav>
@@ -83,9 +105,9 @@ const Sidebar = ({ user, profile, collapsed, setCollapsed }) => {
       <div className="p-4 border-t border-white/10 space-y-4 bg-toyota-charcoal/30">
         {!collapsed && (
           <div className="px-3 py-3 bg-white/5 rounded-sm border border-white/10">
-            <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">User Profile</p>
-            <p className="text-xs font-bold text-white truncate">{profile?.full_name || user?.email}</p>
-            <div className="mt-2 inline-flex items-center px-2 py-0.5 rounded-sm bg-toyota-red text-[9px] font-black uppercase tracking-widest">
+            <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Authenticated As</p>
+            <p className="text-xs font-bold text-white truncate">{profile?.full_name || user?.email || 'Active Session'}</p>
+            <div className={`mt-2 inline-flex items-center px-2 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-widest ${profile?.role === 'Guest' ? 'bg-gray-600 text-gray-300' : 'bg-toyota-red text-white'}`}>
               {profile?.role || 'Guest'}
             </div>
           </div>

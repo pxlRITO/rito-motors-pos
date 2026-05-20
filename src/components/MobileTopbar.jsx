@@ -29,6 +29,8 @@ const MobileTopbar = ({ user, profile }) => {
     return item.roles.includes(profile.role);
   });
 
+  const hasAccess = profile && ['Admin', 'Sales Agent', 'Customer'].includes(profile.role);
+
   return (
     <div className="md:hidden relative z-[100] font-sans">
       <div className="bg-toyota-black text-white p-4 flex items-center justify-between shadow-md">
@@ -51,7 +53,7 @@ const MobileTopbar = ({ user, profile }) => {
             onClick={() => setIsOpen(false)}
           />
           <div className="bg-white border-b border-gray-200 p-4 space-y-1 absolute w-full z-50 shadow-2xl animate-in slide-in-from-top duration-200">
-            {filteredItems.length > 0 ? (
+            {hasAccess ? (
               filteredItems.map((item) => (
                 <NavLink
                   key={item.path}
@@ -68,18 +70,31 @@ const MobileTopbar = ({ user, profile }) => {
                   <span className="text-[11px] font-black uppercase tracking-widest">{item.name}</span>
                 </NavLink>
               ))
+            ) : profile ? (
+              <div className="px-4 py-8 text-center space-y-3">
+                <p className="text-[10px] text-gray-400 italic uppercase font-black tracking-widest">
+                  No access granted for this role
+                </p>
+                <button 
+                  onClick={() => { navigate('/showroom'); setIsOpen(false); }}
+                  className="text-[10px] text-toyota-red font-black uppercase tracking-widest"
+                >
+                  Back to Showroom
+                </button>
+              </div>
             ) : (
-              <div className="px-4 py-4 text-[10px] text-gray-400 italic text-center uppercase font-black tracking-widest">
-                No access granted
+              <div className="px-4 py-8 text-center">
+                <Loader2 className="animate-spin text-toyota-red mx-auto mb-2" size={20} />
+                <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest">Loading...</p>
               </div>
             )}
             
             <div className="pt-6 mt-4 border-t border-gray-100">
               <div className="px-4 py-4 mb-4 bg-toyota-gray rounded-sm border border-gray-200">
-                <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Signed in as</p>
+                <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Authenticated As</p>
                 <p className="text-xs font-bold text-toyota-black truncate">{profile?.full_name || user?.email}</p>
-                <div className="mt-2 inline-flex items-center px-2 py-0.5 rounded-sm bg-toyota-red text-white text-[9px] font-black uppercase tracking-widest">
-                  {profile?.role}
+                <div className={`mt-2 inline-flex items-center px-2 py-0.5 rounded-sm text-white text-[9px] font-black uppercase tracking-widest ${profile?.role === 'Guest' ? 'bg-gray-500' : 'bg-toyota-red'}`}>
+                  {profile?.role || 'Guest'}
                 </div>
               </div>
               <button
