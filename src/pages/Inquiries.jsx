@@ -56,12 +56,15 @@ const Inquiries = () => {
 
       if (error) throw error;
       
-      // Re-fetch to ensure sync
+      // Re-fetch to ensure sync across all lists
       await fetchInquiries();
       
+      // Update local selected inquiry if it's the one being changed
       if (selectedInquiry?.id === id) {
         setSelectedInquiry(prev => ({ ...prev, status: newStatus }));
       }
+      
+      alert(`Inquiry status updated to ${newStatus}.`);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -81,10 +84,17 @@ const Inquiries = () => {
       if (error) throw error;
       
       setSaveSuccess(true);
+      alert("Staff message saved.");
       setTimeout(() => setSaveSuccess(false), 3000);
       
-      // Re-fetch to ensure sync
+      // Re-fetch list to keep everything in sync
       await fetchInquiries();
+      
+      // Explicitly update selected inquiry to ensure UI is fresh
+      const updatedInquiry = inquiries.find(inq => inq.id === selectedInquiry.id);
+      if (updatedInquiry) {
+        setSelectedInquiry({ ...updatedInquiry, staff_message: selectedInquiry.staff_message });
+      }
     } catch (err) {
       setError(err.message);
     } finally {
