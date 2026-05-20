@@ -58,7 +58,6 @@ const App = () => {
 
       if (error) {
         console.error('Error fetching profile:', error.message);
-        // If profile doesn't exist, we might want to treat them as a Guest
         setProfile({ role: 'Guest' });
       } else {
         console.log('Fetched Profile:', data);
@@ -90,17 +89,36 @@ const App = () => {
       return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    // Wait for profile to load if session exists
+    // Wait for profile to load if session exists (though loading state should handle this)
     if (!profile) return null;
 
-    // If role is Guest or unknown, they shouldn't be in protected routes (except maybe showroom)
-    if (profile.role === 'Guest' || !['Admin', 'Sales Agent', 'Customer'].includes(profile.role)) {
-      return <Navigate to="/showroom" replace />;
+    // Enforce valid roles for any protected content
+    const validRoles = ['Admin', 'Sales Agent', 'Customer'];
+    if (!validRoles.includes(profile.role)) {
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-toyota-gray p-8 text-center">
+          <div className="w-16 h-16 bg-red-50 text-toyota-red rounded-full flex items-center justify-center mb-4">
+            <Loader2 className="animate-spin" size={32} />
+          </div>
+          <h2 className="text-xl font-black uppercase tracking-tight text-toyota-black">Profile Not Found</h2>
+          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-2 max-w-xs">
+            We couldn't verify your account permissions. Please contact an administrator or return to the showroom.
+          </p>
+          <button 
+            onClick={() => supabase.auth.signOut()} 
+            className="btn-primary mt-6 px-8"
+          >
+            Logout & Return
+          </button>
+        </div>
+      );
     }
 
+    // Role-based access control
     if (roles.length > 0 && !roles.includes(profile.role)) {
-      // Redirect based on role if they try to access unauthorized area
+      // If Customer tries to access staff pages, send to portal
       if (profile.role === 'Customer') return <Navigate to="/customer" replace />;
+      // If Staff tries to access unauthorized staff pages, send to dashboard
       if (['Admin', 'Sales Agent'].includes(profile.role)) return <Navigate to="/" replace />;
       return <Navigate to="/showroom" replace />;
     }
@@ -132,7 +150,7 @@ const App = () => {
                     <Route path="/" element={
                       profile?.role === 'Customer' ? (
                         <Navigate to="/customer" replace />
-                      ) : ['Admin', 'Sales Agent'].includes(profile?.role) ? (
+                      ) : (profile?.role === 'Admin' || profile?.role === 'Sales Agent') ? (
                         <Dashboard />
                       ) : (
                         <Navigate to="/showroom" replace />
@@ -163,6 +181,12 @@ const App = () => {
                     } />
                     
                     <Route path="/customer" element={
+                      <ProtectedRoute roles={['Customer']}>
+                        <CustomerPortal user={session?.user} profile={profile} />
+                      </ProtectedRoute>
+                    } />
+                    {/* Added /customer-portal as an alias for /customer as per requirements */}
+                    <Route path="/customer-portal" element={
                       <ProtectedRoute roles={['Customer']}>
                         <CustomerPortal user={session?.user} profile={profile} />
                       </ProtectedRoute>

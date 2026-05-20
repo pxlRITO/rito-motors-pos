@@ -9,7 +9,8 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  MessageSquare
+  MessageSquare,
+  Loader2
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
