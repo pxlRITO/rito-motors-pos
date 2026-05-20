@@ -23,6 +23,7 @@ const Inquiries = () => {
   const [search, setSearch] = useState('');
   const [selectedInquiry, setSelectedInquiry] = useState(null);
   const [updating, setUpdating] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     fetchInquiries();
@@ -55,14 +56,35 @@ const Inquiries = () => {
 
       if (error) throw error;
       
-      // Update local state
-      setInquiries(prev => prev.map(inq => 
-        inq.id === id ? { ...inq, status: newStatus } : inq
-      ));
+      // Re-fetch to ensure sync
+      await fetchInquiries();
       
       if (selectedInquiry?.id === id) {
         setSelectedInquiry(prev => ({ ...prev, status: newStatus }));
       }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleSaveStaffMessage = async () => {
+    try {
+      setUpdating(true);
+      setSaveSuccess(false);
+      const { error } = await supabase
+        .from('customer_inquiries')
+        .update({ staff_message: selectedInquiry.staff_message })
+        .eq('id', selectedInquiry.id);
+      
+      if (error) throw error;
+      
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+      
+      // Re-fetch to ensure sync
+      await fetchInquiries();
     } catch (err) {
       setError(err.message);
     } finally {
@@ -212,28 +234,22 @@ const Inquiries = () => {
                   />
                   <button 
                     disabled={updating}
-                    onClick={async () => {
-                      try {
-                        setUpdating(true);
-                        const { error } = await supabase
-                          .from('customer_inquiries')
-                          .update({ staff_message: selectedInquiry.staff_message })
-                          .eq('id', selectedInquiry.id);
-                        if (error) throw error;
-                        // Refresh local list
-                        setInquiries(prev => prev.map(inq => 
-                          inq.id === selectedInquiry.id ? { ...inq, staff_message: selectedInquiry.staff_message } : inq
-                        ));
-                      } catch (err) {
-                        setError(err.message);
-                      } finally {
-                        setUpdating(false);
-                      }
-                    }}
-                    className="btn-secondary w-full py-2 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2"
+                    onClick={handleSaveStaffMessage}
+                    className={`btn-secondary w-full py-2 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${saveSuccess ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : ''}`}
                   >
-                    {updating ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
-                    Save Staff Message
+                    {updating ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : saveSuccess ? (
+                      <>
+                        <CheckCircle2 size={14} />
+                        Message Saved!
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 size={14} />
+                        Save Staff Message
+                      </>
+                    )}
                   </button>
                 </div>
 
