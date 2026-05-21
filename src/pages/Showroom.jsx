@@ -77,15 +77,24 @@ const CarCard = ({ car, handleOpenModal }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-y-3 mb-6 py-4 border-y border-gray-50">
-          <div className="space-y-0.5">
-            <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Category</p>
-            <p className="text-[10px] font-bold text-toyota-charcoal uppercase italic">Passenger Car</p>
-          </div>
-          <div className="space-y-0.5 text-right">
-            <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Drive</p>
-            <p className="text-[10px] font-bold text-toyota-charcoal uppercase italic">All-Wheel Drive</p>
-          </div>
-        </div>
+  <div className="space-y-0.5">
+    <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest">
+      Category
+    </p>
+    <p className="text-[10px] font-bold text-toyota-charcoal uppercase italic">
+      {car.category || 'Vehicle'}
+    </p>
+  </div>
+
+  <div className="space-y-0.5 text-right">
+    <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest">
+      Drive
+    </p>
+    <p className="text-[10px] font-bold text-toyota-charcoal uppercase italic">
+      {car.drive_type || 'Not specified'}
+    </p>
+  </div>
+</div>
 
         <div className="flex flex-wrap gap-1.5 mb-8">
           {car.specs?.slice(0, 4).map((spec, i) => (
